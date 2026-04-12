@@ -1,0 +1,77 @@
+version: '3.8'
+
+services:
+  # =============================================
+  # Base de datos MySQL
+  # =============================================
+  mysql:
+    image: mysql:8.4
+    container_name: qg_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root123
+      MYSQL_DATABASE: quality_gates_db
+      MYSQL_USER: appuser
+      MYSQL_PASSWORD: apppass123
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - quality-gates-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot123"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # =============================================
+  # API REST - Spring Boot
+  # =============================================
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: qg_api
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_PORT: 3306
+      MYSQL_DB: quality_gates_db
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root123
+    ports:
+      - "8081:8081"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - quality-gates-network
+    restart: on-failure
+
+  # =============================================
+  # Jenkins CI/CD
+  # =============================================
+  jenkins:
+    image: jenkins/jenkins:lts-jdk21
+    container_name: qg_jenkins
+    user: root
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    volumes:
+      - jenkins_data:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - quality-gates-network
+    environment:
+      JAVA_OPTS: "-Djenkins.install.runSetupWizard=true"
+    restart: unless-stopped
+
+volumes:
+  mysql_data:
+    driver: local
+  jenkins_data:
+    driver: local
+
+networks:
+  quality-gates-network:
+    driver: bridge
