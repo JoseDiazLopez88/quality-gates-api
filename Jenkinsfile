@@ -22,14 +22,14 @@ pipeline {
         stage('Build') {
             steps {
                 echo '🔨 Compilando el proyecto...'
-                bat 'mvn clean compile -B'
+                sh 'mvn clean compile -B'
             }
         }
 
         stage('Unit Tests') {
             steps {
                 echo '🧪 Ejecutando pruebas unitarias...'
-                bat 'mvn test -B'
+                sh 'mvn test -B'
             }
             post {
                 always {
@@ -42,7 +42,7 @@ pipeline {
         stage('Integration Tests') {
             steps {
                 echo '🔗 Ejecutando pruebas de integración...'
-                bat 'mvn verify -B -DskipUnitTests=true'
+                sh 'mvn verify -B -DskipUnitTests=true'
             }
             post {
                 always {
@@ -55,7 +55,7 @@ pipeline {
         stage('Code Coverage - JaCoCo') {
             steps {
                 echo '📊 Generando reporte de cobertura de código...'
-                bat 'mvn jacoco:report -B'
+                sh 'mvn jacoco:report -B'
             }
             post {
                 always {
@@ -74,7 +74,7 @@ pipeline {
         stage('Static Analysis - Checkstyle') {
             steps {
                 echo '🔍 Ejecutando análisis estático de código...'
-                bat 'mvn checkstyle:checkstyle -B'
+                sh 'mvn checkstyle:checkstyle -B'
             }
             post {
                 always {
@@ -99,10 +99,10 @@ pipeline {
                     echo '✅ Quality Gate: Verificando que todos los tests pasen'
 
                     // Verificar que JaCoCo check pase (mínimo 80%)
-                    bat 'mvn jacoco:check -B'
+                    sh 'mvn jacoco:check -B'
 
                     // Verificar Checkstyle
-                    bat 'mvn checkstyle:check -B'
+                    sh 'mvn checkstyle:check -B'
                 }
             }
         }
@@ -111,8 +111,8 @@ pipeline {
             steps {
                 echo '🐳 Construyendo imagen Docker...'
                 script {
-                    bat "docker build -t ${DOCKER_IMAGE} ."
-                    bat "docker tag ${DOCKER_IMAGE} ${APP_NAME}:latest"
+                    sh "docker build -t ${DOCKER_IMAGE} ."
+                    sh "docker tag ${DOCKER_IMAGE} ${APP_NAME}:latest"
                 }
             }
         }
@@ -122,20 +122,20 @@ pipeline {
                 echo '🚀 Desplegando aplicación...'
                 script {
                     // Detener contenedor anterior si existe
-                    bat '''
-                        docker stop qg_api_deployed 2>nul || echo "No container to stop"
-                        docker rm qg_api_deployed 2>nul || echo "No container to remove"
+                    sh '''
+                        docker stop qg_api_deployed 2>/dev/null || echo "No container to stop"
+                        docker rm qg_api_deployed 2>/dev/null || echo "No container to remove"
                     '''
 
                     // Desplegar nueva versión
-                    bat """
-                        docker run -d --name qg_api_deployed ^
-                            -p 8082:8081 ^
-                            -e MYSQL_HOST=host.docker.internal ^
-                            -e MYSQL_PORT=3307 ^
-                            -e MYSQL_DB=quality_gates_db ^
-                            -e MYSQL_USER=root ^
-                            -e MYSQL_PASSWORD=root123 ^
+                    sh """
+                        docker run -d --name qg_api_deployed \\
+                            -p 8082:8081 \\
+                            -e MYSQL_HOST=host.docker.internal \\
+                            -e MYSQL_PORT=3307 \\
+                            -e MYSQL_DB=quality_gates_db \\
+                            -e MYSQL_USER=root \\
+                            -e MYSQL_PASSWORD=root123 \\
                             ${APP_NAME}:latest
                     """
                 }
