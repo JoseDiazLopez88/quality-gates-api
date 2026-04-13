@@ -29,7 +29,7 @@ public class ProductController {
     private final ProductService productService;
 
     /**
-     * Constructor con inyección de dependencias.
+     * Constructor con inyección de dependenciass.
      *
      * @param productService servicio de productos
      */
@@ -76,7 +76,7 @@ public class ProductController {
     /**
      * Actualiza un producto existente.
      *
-     * @param id identificador del producto
+     * @param id      identificador del producto
      * @param product datos actualizados
      * @return el producto actualizado
      */
