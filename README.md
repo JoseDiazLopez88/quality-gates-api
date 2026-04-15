@@ -1,4 +1,4 @@
-# Quality Gates API - Automatización de Pruebas Continuas
+# Automatización de Quality Gates y Pruebas Continuas en una API REST de Java mediante Pipelines de Jenkins y Docker, JaCoCo + Checkstyle
 
 ## 📋 Descripción
 
