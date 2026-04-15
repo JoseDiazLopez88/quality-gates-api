@@ -46,50 +46,50 @@ class ProductIntegrationTest {
                 productRepository.deleteAll();
         }
 
-        // @Test
-        // @DisplayName("Integración: Flujo completo CRUD de productos")
-        // void fullCrudFlow() {
-        // // CREATE - Crear producto
-        // Product newProduct = new Product("Teclado Mecánico",
-        // "Teclado RGB Cherry MX", 89.99, 25, "Periféricos");
+        @Test
+        @DisplayName("Integración: Flujo completo CRUD de productos")
+        void fullCrudFlow() {
+                // CREATE - Crear producto
+                Product newProduct = new Product("Teclado Mecánico",
+                                "Teclado RGB Cherry MX", 89.99, 25, "Periféricos");
 
-        // ResponseEntity<Product> createResponse = restTemplate
-        // .postForEntity(baseUrl, newProduct, Product.class);
+                ResponseEntity<Product> createResponse = restTemplate
+                                .postForEntity(baseUrl, newProduct, Product.class);
 
-        // assertEquals(HttpStatus.CREATED, createResponse.getStatusCode());
-        // assertNotNull(createResponse.getBody());
-        // assertNotNull(createResponse.getBody().getId());
+                assertEquals(HttpStatus.CREATED, createResponse.getStatusCode());
+                assertNotNull(createResponse.getBody());
+                assertNotNull(createResponse.getBody().getId());
 
-        // Long productId = createResponse.getBody().getId();
+                Long productId = createResponse.getBody().getId();
 
-        // // READ - Obtener producto por ID
-        // ResponseEntity<Product> getResponse = restTemplate
-        // .getForEntity(baseUrl + "/" + productId, Product.class);
+                // READ - Obtener producto por ID
+                ResponseEntity<Product> getResponse = restTemplate
+                                .getForEntity(baseUrl + "/" + productId, Product.class);
 
-        // assertEquals(HttpStatus.OK, getResponse.getStatusCode());
-        // assertEquals("Teclado Mecánico", getResponse.getBody().getName());
+                assertEquals(HttpStatus.OK, getResponse.getStatusCode());
+                assertEquals("Teclado Mecánico", getResponse.getBody().getName());
 
-        // // UPDATE - Actualizar producto
-        // Product updatedProduct = new Product("Teclado Mecánico Pro",
-        // "Teclado RGB Cherry MX Brown", 119.99, 15, "Periféricos");
+                // UPDATE - Actualizar producto
+                Product updatedProduct = new Product("Teclado Mecánico Pro",
+                                "Teclado RGB Cherry MX Brown", 119.99, 15, "Periféricos");
 
-        // restTemplate.put(baseUrl + "/" + productId, updatedProduct);
+                restTemplate.put(baseUrl + "/" + productId, updatedProduct);
 
-        // ResponseEntity<Product> updatedResponse = restTemplate
-        // .getForEntity(baseUrl + "/" + productId, Product.class);
+                ResponseEntity<Product> updatedResponse = restTemplate
+                                .getForEntity(baseUrl + "/" + productId, Product.class);
 
-        // assertEquals("Teclado Mecánico Pro",
-        // updatedResponse.getBody().getName());
-        // assertEquals(119.99, updatedResponse.getBody().getPrice());
+                assertEquals("Teclado Mecánico Pro",
+                                updatedResponse.getBody().getName());
+                assertEquals(119.99, updatedResponse.getBody().getPrice());
 
-        // // DELETE - Eliminar producto
-        // restTemplate.delete(baseUrl + "/" + productId);
+                // DELETE - Eliminar producto
+                restTemplate.delete(baseUrl + "/" + productId);
 
-        // ResponseEntity<Product> deletedResponse = restTemplate
-        // .getForEntity(baseUrl + "/" + productId, Product.class);
+                ResponseEntity<Product> deletedResponse = restTemplate
+                                .getForEntity(baseUrl + "/" + productId, Product.class);
 
-        // assertEquals(HttpStatus.NOT_FOUND, deletedResponse.getStatusCode());
-        // }
+                assertEquals(HttpStatus.NOT_FOUND, deletedResponse.getStatusCode());
+        }
 
         @Test
         @DisplayName("Integración: Listar todos los productos")

@@ -121,64 +121,64 @@ class ProductServiceTest {
                 verify(productRepository, times(1)).save(any(Product.class));
         }
 
-        // @Test
-        // @DisplayName("Debe lanzar excepción al actualizar producto inexistente")
-        // void updateProduct_NonExistingId_ThrowsException() {
-        // Product updatedDetails = new Product("Test", "Test", 10.0, 1, "Test");
+        @Test
+        @DisplayName("Debe lanzar excepción al actualizar producto inexistente")
+        void updateProduct_NonExistingId_ThrowsException() {
+                Product updatedDetails = new Product("Test", "Test", 10.0, 1, "Test");
 
-        // when(productRepository.findById(99L))
-        // .thenReturn(Optional.empty());
+                when(productRepository.findById(99L))
+                                .thenReturn(Optional.empty());
 
-        // assertThrows(ResourceNotFoundException.class,
-        // () -> productService.updateProduct(99L, updatedDetails));
-        // }
+                assertThrows(ResourceNotFoundException.class,
+                                () -> productService.updateProduct(99L, updatedDetails));
+        }
 
-        // @Test
-        // @DisplayName("Debe eliminar un producto existente")
-        // void deleteProduct_ExistingId_DeletesSuccessfully() {
-        // when(productRepository.findById(1L))
-        // .thenReturn(Optional.of(product1));
+        @Test
+        @DisplayName("Debe eliminar un producto existente")
+        void deleteProduct_ExistingId_DeletesSuccessfully() {
+                when(productRepository.findById(1L))
+                                .thenReturn(Optional.of(product1));
 
-        // productService.deleteProduct(1L);
+                productService.deleteProduct(1L);
 
-        // verify(productRepository, times(1)).findById(1L);
-        // verify(productRepository, times(1)).delete(product1);
-        // }
+                verify(productRepository, times(1)).findById(1L);
+                verify(productRepository, times(1)).delete(product1);
+        }
 
-        // @Test
-        // @DisplayName("Debe lanzar excepción al eliminar producto inexistente")
-        // void deleteProduct_NonExistingId_ThrowsException() {
-        // when(productRepository.findById(99L))
-        // .thenReturn(Optional.empty());
+        @Test
+        @DisplayName("Debe lanzar excepción al eliminar producto inexistente")
+        void deleteProduct_NonExistingId_ThrowsException() {
+                when(productRepository.findById(99L))
+                                .thenReturn(Optional.empty());
 
-        // assertThrows(ResourceNotFoundException.class,
-        // () -> productService.deleteProduct(99L));
-        // }
+                assertThrows(ResourceNotFoundException.class,
+                                () -> productService.deleteProduct(99L));
+        }
 
-        // @Test
-        // @DisplayName("Debe obtener productos por categoría")
-        // void getProductsByCategory_ReturnsFilteredProducts() {
-        // when(productRepository.findByCategory("Electrónica"))
-        // .thenReturn(Arrays.asList(product1, product2));
+        @Test
+        @DisplayName("Debe obtener productos por categoría")
+        void getProductsByCategory_ReturnsFilteredProducts() {
+                when(productRepository.findByCategory("Electrónica"))
+                                .thenReturn(Arrays.asList(product1, product2));
 
-        // List<Product> result = productService.getProductsByCategory("Electrónica");
+                List<Product> result = productService.getProductsByCategory("Electrónica");
 
-        // assertNotNull(result);
-        // assertEquals(2, result.size());
-        // verify(productRepository, times(1))
-        // .findByCategory("Electrónica");
-        // }
+                assertNotNull(result);
+                assertEquals(2, result.size());
+                verify(productRepository, times(1))
+                                .findByCategory("Electrónica");
+        }
 
-        // @Test
-        // @DisplayName("Debe buscar productos por nombre")
-        // void searchProductsByName_ReturnsMatchingProducts() {
-        // when(productRepository.findByNameContainingIgnoreCase("Laptop"))
-        // .thenReturn(List.of(product1));
+        @Test
+        @DisplayName("Debe buscar productos por nombre")
+        void searchProductsByName_ReturnsMatchingProducts() {
+                when(productRepository.findByNameContainingIgnoreCase("Laptop"))
+                                .thenReturn(List.of(product1));
 
-        // List<Product> result = productService.searchProductsByName("Laptop");
+                List<Product> result = productService.searchProductsByName("Laptop");
 
-        // assertNotNull(result);
-        // assertEquals(1, result.size());
-        // assertEquals("Laptop HP", result.get(0).getName());
-        // }
+                assertNotNull(result);
+                assertEquals(1, result.size());
+                assertEquals("Laptop HP", result.get(0).getName());
+        }
 }
