@@ -42,7 +42,7 @@ pipeline {
         stage('Integration Tests') {
             steps {
                 echo '🔗 Ejecutando pruebas de integración...'
-                sh 'mvn verify -B -DskipUnitTests=true'
+                sh 'mvn failsafe:integration-test -B -DskipUnitTests=true'
             }
             post {
                 always {
