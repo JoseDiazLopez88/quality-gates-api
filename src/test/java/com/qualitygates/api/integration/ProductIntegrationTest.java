@@ -91,25 +91,26 @@ class ProductIntegrationTest {
         // assertEquals(HttpStatus.NOT_FOUND, deletedResponse.getStatusCode());
         // }
 
-        // @Test
-        // @DisplayName("Integración: Listar todos los productos")
-        // void getAllProducts_ReturnsAllProducts() {
-        // // Insertar datos de prueba
-        // productRepository.save(new Product("Producto 1",
-        // "Desc 1", 10.0, 5, "Cat1"));
-        // productRepository.save(new Product("Producto 2",
-        // "Desc 2", 20.0, 10, "Cat2"));
+        @Test
+        @DisplayName("Integración: Listar todos los productos")
+        void getAllProducts_ReturnsAllProducts() {
+                // Insertar datos de prueba
+                productRepository.save(new Product("Producto 1",
+                                "Desc 1", 10.0, 5, "Cat1"));
+                productRepository.save(new Product("Producto 2",
+                                "Desc 2", 20.0, 10, "Cat2"));
 
-        // ResponseEntity<List<Product>> response = restTemplate.exchange(
-        // baseUrl,
-        // HttpMethod.GET,
-        // null,
-        // new ParameterizedTypeReference<List<Product>>() { });
+                ResponseEntity<List<Product>> response = restTemplate.exchange(
+                                baseUrl,
+                                HttpMethod.GET,
+                                null,
+                                new ParameterizedTypeReference<List<Product>>() {
+                                });
 
-        // assertEquals(HttpStatus.OK, response.getStatusCode());
-        // assertNotNull(response.getBody());
-        // assertEquals(2, response.getBody().size());
-        // }
+                assertEquals(HttpStatus.OK, response.getStatusCode());
+                assertNotNull(response.getBody());
+                assertEquals(2, response.getBody().size());
+        }
 
         // @Test
         // @DisplayName("Integración: Filtrar por categoría")
